@@ -1,15 +1,23 @@
 package rafael.projects.store.springserviceproduct.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import rafael.projects.store.springserviceproduct.entity.Category;
 import rafael.projects.store.springserviceproduct.entity.Product;
 import rafael.projects.store.springserviceproduct.service.ProductService;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -47,7 +55,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product){
+    public ResponseEntity<Object> createProduct(@Valid @RequestBody Product product, BindingResult result) throws JsonProcessingException {
+        if(result.hasErrors()) {
+            //return new ResponseEntity(this.formatMessage(result), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, this.formatMessage(result));
+        }
         Product productCreate = productService.createProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(productCreate);
     }
@@ -79,6 +91,29 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(product);
+    }
+
+
+    //Para formatear los mensajes
+    private String formatMessage(BindingResult bindingResult) throws JsonProcessingException {
+        List<Map<String, String>> errors = bindingResult.getFieldErrors().stream()
+                .map(err -> {
+                    Map<String, String> error = new HashMap<>();
+                    error.put(err.getField(), err.getDefaultMessage());
+                    return error;
+                }).collect(Collectors.toList());
+        ErrorMessage errorMessage = ErrorMessage.builder()
+                .code("01")
+                .messages(errors).build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = objectMapper.writeValueAsString(errorMessage);
+        }catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
+        return jsonString;
     }
 
 }
