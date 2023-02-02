@@ -49,6 +49,7 @@ public class CustomerServiceImpl implements CustomerService{
         customerDB.setEmail(customer.getEmail());
         customerDB.setPhotoUrl(customer.getPhotoUrl());
 
+        log.info("this is the return res {}", customerDB);
         return customerRepository.save(customerDB);
     }
 

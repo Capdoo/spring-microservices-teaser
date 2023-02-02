@@ -86,8 +86,8 @@ public class CustomerController {
             log.error("User not found id: {}", id);
             return ResponseEntity.notFound().build();
         }
-        customerDB.setId(id);
-        customerDB = customerService.updateCustomer(customerDB);
+        customer.setId(id);
+        customerDB = customerService.updateCustomer(customer);
         return ResponseEntity.ok(customerDB);
     }
 
@@ -104,7 +104,6 @@ public class CustomerController {
         customerDB = customerService.deleteCustomer(customerDB);
         return ResponseEntity.ok(customerDB);
     }
-
 
     //aux
     //Format messages
