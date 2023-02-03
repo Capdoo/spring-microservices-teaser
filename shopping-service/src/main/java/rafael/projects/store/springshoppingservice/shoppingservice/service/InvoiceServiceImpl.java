@@ -29,7 +29,7 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     public Invoice createInvoice(Invoice invoice) {
-        Invoice invoiceDB = getInvoice(invoice.getId());
+        Invoice invoiceDB = invoiceRepository.findByNumberInvoice(invoice.getNumberInvoice());
         //Indempotencia
         if (null != invoiceDB){
             return invoiceDB;
