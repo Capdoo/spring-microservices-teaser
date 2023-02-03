@@ -9,7 +9,7 @@
 
 spring:
   application:
-    name: customer-service
+    name: customer-service-prop
   cloud:
     config:
       #Set config server
