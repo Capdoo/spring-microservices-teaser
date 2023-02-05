@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: shopping-service-prop
+  cloud:
+    config:
+      #Set config server
+      uri: http://localhost:8083
+      username: root
+      password: secret
