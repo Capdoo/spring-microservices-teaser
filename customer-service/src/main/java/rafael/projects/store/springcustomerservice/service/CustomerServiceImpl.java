@@ -29,6 +29,7 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Customer createCustomer(Customer customer) {
         //Principio de Indempotencia
+        //Devuelve lo ya creado, en caso el usuario haya entendido que no se ha creado
         Customer customerDB = customerRepository.findByNumberID(customer.getNumberID());
         if (customerDB != null){
             return customerDB;

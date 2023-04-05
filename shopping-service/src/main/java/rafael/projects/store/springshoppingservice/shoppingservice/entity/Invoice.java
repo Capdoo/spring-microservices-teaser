@@ -46,6 +46,8 @@ public class Invoice {
         items = new ArrayList<>();
     }
 
+    //Que se registre la fecha autom. antes de insertar en bd
+    //@PrePersist
     @PrePersist
     public void prePersist(){
         this.createAt = new Date();

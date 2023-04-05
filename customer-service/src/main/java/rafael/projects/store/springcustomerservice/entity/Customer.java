@@ -40,7 +40,6 @@ public class Customer implements Serializable {
     @Column(name = "photo_url")
     private String photoUrl;
 
-
     @NotNull(message = "La region no puede ser vacia")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
@@ -48,8 +47,6 @@ public class Customer implements Serializable {
     private Region region;
 
     private String state;
-
-
 
 }
 

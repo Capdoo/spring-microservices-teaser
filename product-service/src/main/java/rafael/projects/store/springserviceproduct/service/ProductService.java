@@ -6,7 +6,6 @@ import rafael.projects.store.springserviceproduct.entity.Product;
 import java.util.List;
 
 public interface ProductService {
-
     public List<Product> listAllProduct();
     public Product getProduct(Long id);
     public Product createProduct(Product product);
