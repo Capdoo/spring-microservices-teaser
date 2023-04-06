@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rafael.projects.store.springshoppingservice.shoppingservice.models.Customer;
 
-@FeignClient(value = "customer-service-prop", path = "/customers")
+@FeignClient(value = "customer-service-prop", path = "/customers", fallback = CustomerHystrixFallbackFactory.class)
 //@RequestMapping("/customers")
 public interface CustomerClient {
 
