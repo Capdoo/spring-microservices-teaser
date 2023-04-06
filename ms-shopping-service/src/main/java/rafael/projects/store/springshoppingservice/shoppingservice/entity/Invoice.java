@@ -39,6 +39,7 @@ public class Invoice {
 
     private String state;
 
+    //Agregado en la seccion Feign
     @Transient
     private Customer customer;
 

@@ -3,11 +3,17 @@ package rafael.projects.store.springshoppingservice.shoppingservice.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rafael.projects.store.springshoppingservice.shoppingservice.client.CustomerClient;
+import rafael.projects.store.springshoppingservice.shoppingservice.client.ProductClient;
 import rafael.projects.store.springshoppingservice.shoppingservice.entity.Invoice;
+import rafael.projects.store.springshoppingservice.shoppingservice.entity.InvoiceItem;
+import rafael.projects.store.springshoppingservice.shoppingservice.models.Customer;
+import rafael.projects.store.springshoppingservice.shoppingservice.models.Product;
 import rafael.projects.store.springshoppingservice.shoppingservice.repository.InvoiceItemsRepository;
 import rafael.projects.store.springshoppingservice.shoppingservice.repository.InvoiceRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -19,7 +25,12 @@ public class InvoiceServiceImpl implements InvoiceService{
     @Autowired
     InvoiceItemsRepository invoiceItemsRepository;
 
-    //@Autowired
+    //Usado en Feign
+    @Autowired
+    ProductClient productClient;
+    @Autowired
+    CustomerClient customerClient;
+
 
 
     @Override
@@ -35,7 +46,13 @@ public class InvoiceServiceImpl implements InvoiceService{
             return invoiceDB;
         }
         invoice.setState("CREATED");
-        return invoiceRepository.save(invoice);
+        invoiceDB = invoiceRepository.save(invoice);
+        //Feign: Actualizar stock por cada producto
+        invoiceDB.getItems().forEach( e -> {
+            productClient.updateStockProduct(e.getProductId(), e.getQuantity() * -1);
+        });
+
+        return invoiceDB;
     }
 
     @Override
@@ -66,6 +83,26 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     public Invoice getInvoice(Long id) {
-        return invoiceRepository.findById(id).orElse(null);
+        //Feign: Actualizar obtener info
+        Invoice invoice = invoiceRepository.findById(id).orElse(null);
+        if(invoice != null){
+            //Recuperar usuario
+            Customer customer = customerClient.getCustomer(invoice.getCustomerId()).getBody();
+            //Asignar usuario en factura
+            invoice.setCustomer(customer);
+            //Recuperar datos de c/producto de nuestra factura
+            List<InvoiceItem> listItems = invoice.getItems().stream().map(
+                    item -> {
+                        Product product = productClient.getProduct(item.getProductId()).getBody();
+                        item.setProduct(product);
+                        return item;
+                    }
+            ).collect(Collectors.toList());
+            //Asignar nueva lista de items
+            invoice.setItems(listItems);
+
+
+        }
+        return invoice;
     }
 }

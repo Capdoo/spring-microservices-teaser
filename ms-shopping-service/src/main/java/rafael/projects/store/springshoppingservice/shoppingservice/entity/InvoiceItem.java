@@ -25,6 +25,7 @@ public class InvoiceItem {
     @Transient
     private Double subTotal;
 
+    //Agregado en la seccion Feign
     @Transient
     private Product product;
 
