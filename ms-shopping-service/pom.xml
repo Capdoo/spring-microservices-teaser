@@ -96,14 +96,14 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-			<version>2.2.6.RELEASE</version>
+			<version>2.2.10.RELEASE</version>
 		</dependency>
 <!--		-Hystrix Dashboard-->
 		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-hystrix-dashboard -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
-			<version>2.2.6.RELEASE</version>
+			<version>2.2.10.RELEASE</version>
 		</dependency>
 
 
