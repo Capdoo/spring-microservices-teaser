@@ -1,12 +1,12 @@
-package rafael.projects.store.springserviceproduct;
+package rafael.projects.store.adminservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringServiceProductApplicationTests {
+class AdminServiceApplicationTests {
 
-	//@Test
+	@Test
 	void contextLoads() {
 	}
 
